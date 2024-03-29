@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Form</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="min-h-screen bg-white flex">
+      <div
+        class="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24"
+      >
+        <div class="mx-auto w-full max-w-sm lg:w-96">
+          <div>
+            <img
+              class="h-12 w-auto"
+              src="https://www.gandhinagaruni.ac.in/wp-content/uploads/2019/01/gu-logo-trans.png"
+              alt="Tech Fest Event Login"
+            />
+            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+              Register Your Details
+            </h2>
+          </div>
+          <div class="mt-8">
+            <div class="mt-6">
+              <form action="/" method="POST" class="space-y-6">
+                <div>
+                  <label
+                    for="email"
+                    class="block text-sm font-medium text-gray-700"
+                    >Your email</label
+                  >
+                  <div class="mt-1">
+                    <input
+                      class="h-10 bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      id="email"
+                      autocomplete="email"
+                      required=""
+                      placeholder="name@company.com"
+                      type="email"
+                      name="email"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    for="username"
+                    class="block text-sm font-medium text-gray-700"
+                    >UserName</label
+                  >
+                  <div class="mt-1">
+                    <input
+                      class="h-10 bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      id="username"
+                      required=""
+                      placeholder="e.g. Bonnie Green"
+                      type="text"
+                      name="username"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    for="full-name"
+                    class="block text-sm font-medium text-gray-700"
+                    >Full Name</label
+                  >
+                  <div class="mt-1">
+                    <input
+                      class="h-10 bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      id="full-name"
+                      required=""
+                      placeholder="e.g. Bonnie Green"
+                      type="text"
+                      name="fullname"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    for="college-name"
+                    class="block text-sm font-medium text-gray-700"
+                    >College Name</label
+                  >
+                  <div class="mt-1">
+                    <input
+                      class="h-10 bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      id="college-name"
+                      required=""
+                      placeholder="gandhinagar university"
+                      type="text"
+                      name="collegename"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    for="phone-number"
+                    class="block text-sm font-medium text-gray-700"
+                    >Phone Number</label
+                  >
+                  <div class="mt-1">
+                    <input
+                      class="h-10 bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      id="phone-number"
+                      required=""
+                      placeholder="+91 94288 XXXXX"
+                      type="text"
+                      name="phonenumber"
+                    />
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="lab">Select </label>
+                  <select name="lab" id="lab" required>
+                    <option value="lab1">Lab 1</option>
+                    <option value="lab2">Lab 2</option>
+                  </select>
+                </div>
+                <div>
+                  <button
+                    type="submit"
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 w-full bg-indigo-600 text-white"
+                  >
+                    Register
+                  </button>
+                </div>
+                <a
+                  class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 w-full bg-indigo-600 text-white"
+                  href="/login"
+                  >Login</a
+                >
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hidden lg:block relative w-0 flex-1">
+        <img
+          class="absolute inset-0 w-full h-auto object-cover"
+          src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg"
+          alt=""
+        />
+      </div>
+    </div>
+  </body>
+</html>
