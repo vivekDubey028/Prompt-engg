@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Data</title>
+  </head>
+  <body>
+    <h1>User Data</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+
+          <td>
+            <img
+              src="{{ user.image_url }}"
+              alt="User Image"
+              style="max-width: 100px"
+            />
+          </td>
+          <label>checkbox</label>
+          <input type="checkbox" />
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

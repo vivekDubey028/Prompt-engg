@@ -3,31 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <meta http-equiv="”refresh”" content="”5”" /> -->
     <title>Image Generation System</title>
-    <style>
-      /* Define CSS for the loading spinner */
-      .loader {
-        border: 4px solid rgba(0, 0, 0, 0.1);
-        border-left-color: #3498db;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-        margin-right: 10px;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <h1>Image Generation System</h1>
     <div>
-      <label for="prompt">Prompt:</label>
-      <input type="text" id="prompt" name="prompt" />
+      <label class="block text-sm font-medium text-gray-700" for="prompt"
+        >Prompt:</label
+      >
+      <input
+        type="text"
+        id="prompt"
+        name="prompt"
+        class="h-10 bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      />
     </div>
     <div>
       <label for="providers">Providers:</label>
@@ -48,12 +42,42 @@
       <input type="text" id="height" name="height" />
     </div>
     <!-- Add the loading spinner here -->
-    <button onclick="generateImages()" id="generateButton">
+    <button
+      onclick="generateImages()"
+      id="generateButton"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    >
       <!-- Added an id to the button for easy reference -->
       <span class="loader"></span> Generate Images
     </button>
     <div id="imageContainer">
       <!-- Images will be displayed here -->
+    </div>
+    <div id="imageContainer1">
+      Images will be past generating image displayed here
+    </div>
+
+    <h1>User Data</h1>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {% for user in users %}
+      <div class="border p-4 rounded-lg">
+        <div class="flex items-center mb-2">
+          <div class="font-semibold mr-2">ID:</div>
+          <div>{{ user.id }}</div>
+        </div>
+        <img
+          class="h-auto max-w-full rounded-lg mb-2"
+          src="{{ user.image_url }}"
+          alt="User Image"
+          style="max-width: 400px"
+        />
+        <div>
+          <label for="isFinalSubmission">Is Final Submission:</label>
+          <input type="radio" id="isFinalSubmission" name="isFinalSubmission" />
+        </div>
+      </div>
+      {% endfor %}
     </div>
 
     <h1>Submit Image</h1>
@@ -63,6 +87,10 @@
     </form>
 
     <script>
+      const isFinalSubmission =
+        document.getElementById("isFinalSubmission").checked;
+      requestData.is_final_submission = isFinalSubmission;
+
       // Function to disable the generate button and show loading spinner
       function disableGenerateButton() {
         const button = document.getElementById("generateButton");
@@ -75,6 +103,7 @@
         const button = document.getElementById("generateButton");
         button.disabled = false;
         button.innerHTML = "Generate Images";
+        location.reload(); // this is function to reload the page after the image is generated to display the past image
       }
 
       // Async function to call API
@@ -112,9 +141,10 @@
             imageContainer.innerHTML = "";
 
             // Check if output is available in the response
-            if (responseData.output && responseData.output.length > 0) {
+            if (responseData.image_url) {
               // Create img element and set its attributes
-              const imageUrl = responseData.output[0];
+              const imageUrl = responseData.image_url;
+              console.log("Image URL:", imageUrl); // Debug statement
               const imgElement = document.createElement("img");
               imgElement.src = imageUrl;
               imgElement.style.width = "512px";
@@ -123,10 +153,10 @@
               imgElement.style.marginBottom = "10px";
               // Append img element to the container
               imageContainer.appendChild(imgElement);
-              console.log(imageUrl);
             } else {
-              // Handle case where no images are returned
-              alert("No images generated.");
+              // Handle case where no image URL is returned
+              console.log("No image URL returned"); // Debug statement
+              alert("No image URL returned.");
             }
           } else {
             // Handle non-success response
@@ -140,24 +170,39 @@
         }
       }
 
-      // Function to send the selected image URL to the backend upon submission
-      async function submitSelectedImage(selectedImageUrl) {
+      // Function to display the generated image URL from the database
+      async function displayGeneratedImage() {
         try {
-          const response = await fetch("/submit_image", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ selectedImageUrl }),
-          });
-
+          const response = await fetch("/get_generated_image");
           const responseData = await response.json();
-          // Handle the response if needed
-          console.log(responseData);
+
+          if (response.ok) {
+            const imageUrl = responseData.image_url;
+            const imageContainer = document.getElementById("imageContainer1");
+            imageContainer.innerHTML = "";
+
+            // Create img element and set its attributes
+            const imgElement = document.createElement("img");
+            imgElement.src = imageUrl;
+            imgElement.style.width = "512px";
+            imgElement.style.height = "512px";
+            imgElement.style.marginRight = "10px";
+            imgElement.style.marginBottom = "10px";
+            // Append img element to the container
+            imageContainer.appendChild(imgElement);
+          } else {
+            alert("Error: " + responseData.message);
+          }
         } catch (error) {
           console.error("Error:", error);
         }
       }
+      console.log(imageContainer1);
+
+      // Call displayGeneratedImage function on page load to display the generated image URL from the database
+      window.onload = function () {
+        displayGeneratedImage();
+      };
     </script>
   </body>
 </html>
