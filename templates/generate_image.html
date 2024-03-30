@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <meta http-equiv="”refresh”" content="”5”" /> -->
     <title>Image Generation System</title>
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
@@ -38,23 +37,20 @@
     </div>
     <div>
       <label for="height">Height:</label>
-      <!-- Fixed typo in label -->
       <input type="text" id="height" name="height" />
     </div>
-    <!-- Add the loading spinner here -->
     <button
       onclick="generateImages()"
       id="generateButton"
       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
     >
-      <!-- Added an id to the button for easy reference -->
       <span class="loader"></span> Generate Images
     </button>
     <div id="imageContainer">
       <!-- Images will be displayed here -->
     </div>
     <div id="imageContainer1">
-      Images will be past generating image displayed here
+      <!-- Images will be past generating image displayed here -->
     </div>
 
     <h1>User Data</h1>
@@ -74,7 +70,13 @@
         />
         <div>
           <label for="isFinalSubmission">Is Final Submission:</label>
-          <input type="radio" id="isFinalSubmission" name="isFinalSubmission" />
+          <input
+            type="radio"
+            id="isFinalSubmission_{{ user.id }}"
+            name="isFinalSubmission"
+            class="image-selection"
+            value="{{ user.image_url }}"
+          />
         </div>
       </div>
       {% endfor %}
@@ -87,10 +89,6 @@
     </form>
 
     <script>
-      const isFinalSubmission =
-        document.getElementById("isFinalSubmission").checked;
-      requestData.is_final_submission = isFinalSubmission;
-
       // Function to disable the generate button and show loading spinner
       function disableGenerateButton() {
         const button = document.getElementById("generateButton");
@@ -170,39 +168,32 @@
         }
       }
 
-      // Function to display the generated image URL from the database
-      async function displayGeneratedImage() {
-        try {
-          const response = await fetch("/get_generated_image");
-          const responseData = await response.json();
+      document.addEventListener("DOMContentLoaded", function () {
+        const imageSelections = document.querySelectorAll(".image-selection"); // Get all radio inputs with class 'image-selection'
+        const submitForm = document.getElementById("submitForm"); // Get the submit form
 
-          if (response.ok) {
-            const imageUrl = responseData.image_url;
-            const imageContainer = document.getElementById("imageContainer1");
-            imageContainer.innerHTML = "";
+        imageSelections.forEach(function (selection) {
+          selection.addEventListener("change", function () {
+            const selectedImageUrl = this.value; // Get the value of the selected image URL
+            document.getElementById("selectedImageUrl").value =
+              selectedImageUrl; // Set the value of the hidden input field to the selected image URL
+          });
+        });
 
-            // Create img element and set its attributes
-            const imgElement = document.createElement("img");
-            imgElement.src = imageUrl;
-            imgElement.style.width = "512px";
-            imgElement.style.height = "512px";
-            imgElement.style.marginRight = "10px";
-            imgElement.style.marginBottom = "10px";
-            // Append img element to the container
-            imageContainer.appendChild(imgElement);
+        submitForm.addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the default form submission
+
+          const selectedImageUrl =
+            document.getElementById("selectedImageUrl").value; // Get the selected image URL
+          if (selectedImageUrl) {
+            // If an image is selected, submit the form
+            this.submit();
           } else {
-            alert("Error: " + responseData.message);
+            // If no image is selected, display an alert
+            alert("Please select an image to submit.");
           }
-        } catch (error) {
-          console.error("Error:", error);
-        }
-      }
-      console.log(imageContainer1);
-
-      // Call displayGeneratedImage function on page load to display the generated image URL from the database
-      window.onload = function () {
-        displayGeneratedImage();
-      };
+        });
+      });
     </script>
   </body>
 </html>

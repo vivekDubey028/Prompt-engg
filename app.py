@@ -186,8 +186,8 @@ def generate_image():
             try:
                 conn = get_db_connection()
                 cur = conn.cursor()
-                cur.execute('INSERT INTO submissions (user_id, prompt_text, image_url, submission_datetime) VALUES (%s, %s, %s, %s)',
-                            (user_id, data.get('prompt', ''), generated_image_url, datetime.now()))
+                cur.execute('INSERT INTO submissions (user_id, prompt_text, image_url, submission_datetime, final_submission) VALUES (%s, %s, %s, %s, %s)',
+                            (user_id, data.get('prompt', ''), generated_image_url, datetime.now(), False))
                 conn.commit()
             except Exception as e:
                 return jsonify({'status': 'error', 'message': str(e)}), 500
@@ -222,6 +222,7 @@ def generate_image():
 
 
 
+
 # Define the route to fetch the generated image URL from the database
 @app.route('/get_generated_image', methods=['GET'])
 def get_generated_image():
@@ -250,25 +251,58 @@ def get_generated_image():
 @app.route('/submit_image', methods=['POST'])
 def submit_image():
     selected_image_url = request.form.get('selectedImageUrl')
-    if selected_image_url:
-        # Fetch the user's details from the session
-        username = session.get('username')
 
-        if username is None:
-            # If username is not found in the session, return an error response
-            return jsonify({'status': 'error', 'message': 'Username not found. Please log in.'}), 401
+    if selected_image_url:
         try:
             conn = get_db_connection()
             cur = conn.cursor()
-            cur.execute('UPDATE users SET image_url = %s WHERE username = %s', (selected_image_url, username))
+
+            # Update the final_submission column to True for the submitted image URL
+            cur.execute('UPDATE submissions SET final_submission = TRUE WHERE image_url = %s', (selected_image_url,))
             conn.commit()
+
             cur.close()
             conn.close()
+
             return jsonify({'status': 'success', 'message': 'Image submitted successfully'})
+
         except Exception as e:
             return jsonify({'status': 'error', 'message': str(e)}), 500
+
     else:
         return jsonify({'status': 'error', 'message': 'No image selected'})
+    
+# Route to render lab1.html template
+@app.route('/lab1', methods=['GET'])
+def lab1():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur.execute("SELECT s.image_url FROM submissions s JOIN users u ON s.user_id = u.user_id WHERE u.lab = 'lab1' AND s.final_submission = true")
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+        return render_template('lab1.html', users=data)
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+# Route to render lab1.html template
+@app.route('/lab2', methods=['GET'])
+def lab2():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur.execute("SELECT s.image_url FROM submissions s JOIN users u ON s.user_id = u.user_id WHERE u.lab = 'lab2' AND s.final_submission = true")
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+        return render_template('lab2.html', users=data)
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

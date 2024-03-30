@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirect Page</title>
+  </head>
+  <body>
+    <h1>Welcome to the Redirect Page</h1>
+    <button id="redirectButton">Redirect</button>
+
+    <script>
+      document
+        .getElementById("redirectButton")
+        .addEventListener("click", function () {
+          // Call the Flask route '/redirect' to determine the appropriate redirect based on user's login location
+          fetch("/redirect")
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              // Redirect the user based on the response
+              window.location.href = data.redirect_url;
+            })
+            .catch((error) => {
+              console.error(
+                "There was a problem with the fetch operation:",
+                error
+              );
+            });
+        });
+    </script>
+  </body>
+</html>
